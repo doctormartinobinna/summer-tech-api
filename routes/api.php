@@ -1,7 +1,9 @@
 <?php
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +24,13 @@ Route::get('/products/{product}', [ProductController::class, 'show']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{category}', [CategoryController::class, 'show']);
+
+/*
+|--------------------------------------------------------------------------
+| Public Contact Routes
+|--------------------------------------------------------------------------
+*/
+Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1');
 
 /*
 |--------------------------------------------------------------------------
@@ -96,3 +105,13 @@ Route::middleware(['auth:sanctum', 'role:admin,manager,staff'])->get('/staff-are
     ]);
 });
 
+
+/*
+|--------------------------------------------------------------------------
+| Contact Messages Management Routes: Admin Only
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get('/contacts', [ContactController::class, 'index']);
+    Route::get('/contacts/{contactMessage}', [ContactController::class, 'show']);
+});
