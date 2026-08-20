@@ -7,34 +7,34 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
-        ]);
+    // public function register(Request $request)
+    // {
+    //     $validatedData = $request->validate([
+    //         'name' => 'required|string|max:255',
+    //         'email' => 'required|email|unique:users,email',
+    //         'password' => 'required|string|min:8',
+    //     ]);
 
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-            'role'=> 'staff',
-        ]);
+    //     $user = User::create([
+    //         'name' => $validatedData['name'],
+    //         'email' => $validatedData['email'],
+    //         'password' => Hash::make($validatedData['password']),
+    //         'role'=> 'staff',
+    //     ]);
 
-      $token = $user->createToken('product-catalogue-token')->plainTextToken;
+    //   $token = $user->createToken('product-catalogue-token')->plainTextToken;
 
-        return response()->json([
-            'status' => true,
-            'message' => 'User registered successfully',
-            'token' => $token,
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-            ],
-        ], 201);
-    }
+    //     return response()->json([
+    //         'status' => true,
+    //         'message' => 'User registered successfully',
+    //         'token' => $token,
+    //         'user' => [
+    //             'id' => $user->id,
+    //             'name' => $user->name,
+    //             'email' => $user->email,
+    //         ],
+    //     ], 201);
+    // }
 
     public function login(Request $request)
     {
@@ -61,6 +61,7 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'role' => $user->role,
             ],
         ]);
     }
@@ -74,6 +75,7 @@ class AuthController extends Controller
                 'id' => $request->user()->id,
                 'name' => $request->user()->name,
                 'email' => $request->user()->email,
+                'role' => $request->user()->role,
             ],
         ]);
     }

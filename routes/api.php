@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +61,10 @@ Route::middleware(['auth:sanctum', 'role:admin,manager'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/users', [UserController::class, 'store']);
+
+    Route::patch('/users/{user}/role', [UserController::class, 'updateRole']);
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
     Route::post('/products/bulk-store', [ProductController::class, 'bulkStore']);
 });

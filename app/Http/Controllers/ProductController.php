@@ -127,6 +127,50 @@ class ProductController extends Controller
         ]);
     }
 
+//     public function update(Request $request, $id)
+// {
+//     $product = Product::find($id);
+
+//     if (!$product) {
+//         return response()->json([
+//             'status' => false,
+//             'message' => 'Product not found'
+//         ], 404);
+//     }
+
+//     $validatedData = $request->validate([
+//         'category_id' => 'sometimes|integer|exists:categories,id',
+//         'name' => 'sometimes|string|max:255',
+//         'slug' => [
+//             'sometimes',
+//             'string',
+//             'max:255',
+//             Rule::unique('products', 'slug')->ignore($product->id),
+//         ],
+//         'description' => 'sometimes|nullable|string',
+//         'price' => 'sometimes|numeric|min:0',
+//         'image' => 'sometimes|nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+//         'is_active' => 'sometimes|boolean',
+//     ]);
+
+//     if ($request->hasFile('image')) {
+//         if ($product->image && Storage::disk('public')->exists($product->image)) {
+//             Storage::disk('public')->delete($product->image);
+//         }
+
+//         $validatedData['image'] = $request->file('image')->store('products', 'public');
+//     }
+
+//     $product->update($validatedData);
+
+//     $product->load('category');
+
+//     return response()->json([
+//         'status' => true,
+//         'message' => 'Product updated successfully',
+//         'data' => new ProductResource($product)
+//     ]);
+// }
 
     public function destroy($id)
     {
