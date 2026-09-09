@@ -17,7 +17,7 @@ class ContactController extends Controller
         $contactMessage = ContactMessage::create($request->validated());
 
         try {
-            Mail::to(env('CONTACT_RECEIVER_EMAIL', config('mail.from.address')))
+            Mail::to(config('contact.receiver_email'))
                 ->send(new ContactMessageMail($contactMessage));
 
             $contactMessage->update([
@@ -25,12 +25,8 @@ class ContactController extends Controller
                 'email_sent_at' => now(),
             ]);
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Contact message submitted successfully and email sent.',
-                'data' => new ContactMessageResource($contactMessage->refresh()),
-            ], 201);
         } catch (Throwable $e) {
+
             Log::error('Contact email failed to send.', [
                 'contact_message_id' => $contactMessage->id,
                 'error' => $e->getMessage(),
@@ -43,9 +39,19 @@ class ContactController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Message saved successfully, but email notification could not be sent at this time.',
-                'data' => new ContactMessageResource($contactMessage->refresh()),
+                'data' => new ContactMessageResource(
+                    $contactMessage->refresh()
+                ),
             ], 202);
         }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Contact message submitted successfully and email sent.',
+            'data' => new ContactMessageResource(
+                $contactMessage->refresh()
+            ),
+        ], 201);
     }
 
     public function index()
